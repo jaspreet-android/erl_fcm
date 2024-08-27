@@ -921,7 +921,6 @@ maybe_add_heir(EjdSupPid, _Self, BaseOpts) when is_pid(EjdSupPid) ->
 maybe_add_heir(_, _, BaseOpts) ->
   BaseOpts.
 
-
 %% ----- process state access, for convenient tracing
 
 put_state(State) ->

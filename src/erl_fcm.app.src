@@ -3,28 +3,41 @@
   {vsn, "0.1.0"},
   {registered, []},
   {mod, {erl_fcm_app, []}},
-  {applications,
-   [kernel,
-    stdlib
+  {applications, [
+   kernel,
+    stdlib,
+    cowboy,
+    cowboy_swagger,
+    worker_pool
    ]},
-  {env,[
+  {env,[{fcm_app,
+   #{
+    name => <<"Hookzapp">>,
+    transport => http, %% http | https
+    workers => 10,
+    port => 8081,
+    ip => {0,0,0,0},
+    host => <<"localhost">>,
+    transport => http,
+    workers => 100,
+    max_attachment_size => 52428800} %% 50 * 1024 * 1024
+},
    {outgoing_pools, [#{conn_opts =>
     #{database => "fcm",
      driver => pgsql,
      host => "127.0.0.1",
      keepalive_interval => 5,
      max_start_interval => 30,
-     password => "postgres",
+     password => "password",
      port => 5432,
      query_timeout => 5000,
-     username => "postgres"},
+     username => "admin"},
     opts =>
     #{call_timeout => 60000,strategy => best_worker,
      workers => 5},
     scope => global,tag => default,type => rdbms}]}
   ]},
   {modules, []},
-
   {licenses, ["Apache-2.0"]},
   {links, []}
  ]}.

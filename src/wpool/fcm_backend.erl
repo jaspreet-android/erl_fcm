@@ -23,7 +23,7 @@
            MainModule :: main_module(),
            TrackedFuns :: [function_name()],
            Opts :: map()) -> ok.
-init(HostType, MainModule, TrackedFuns, Opts) ->
+init(HostType, MainModule, _, Opts) ->
 %%    ensure_backend_metrics(MainModule, TrackedFuns),
     Backend = maps:get(backend, Opts, mnesia),
     BackendModule = backend_module(MainModule, Backend),
@@ -45,16 +45,6 @@ backend_key(HostType, MainModule) ->
 backend_name_key(HostType, MainModule) ->
     {backend_name, HostType, MainModule}.
 
--spec ensure_backend_metrics(MainModule :: main_module(),
-                             FunNames :: [function_name()]) -> ok.
-ensure_backend_metrics(MainModule, FunNames) ->
-    EnsureFun = fun(FunName) ->
-                        CM = call_metric(MainModule, FunName),
-                        TM = time_metric(MainModule, FunName),
-                        mongoose_metrics:ensure_metric(global, CM, spiral),
-                        mongoose_metrics:ensure_metric(global, TM, histogram)
-                end,
-    lists:foreach(EnsureFun, FunNames).
 
 persist_backend_name(HostType, MainModule, Backend, BackendModule) ->
     ModuleKey = backend_key(HostType, MainModule),
@@ -91,10 +81,10 @@ call(HostType, MainModule, FunName, Args) ->
                    Args :: [term()]) -> term().
 call_tracked(HostType, MainModule, FunName, Args) ->
     BackendModule = get_backend_module(HostType, MainModule),
-    CM = call_metric(MainModule, FunName),
-    TM = time_metric(MainModule, FunName),
+     call_metric(MainModule, FunName),
+     time_metric(MainModule, FunName),
 %%    mongoose_metrics:update(global, CM, 1),
-    {Time, Result} = timer:tc(BackendModule, FunName, Args),
+    {_, Result} = timer:tc(BackendModule, FunName, Args),
 %%    mongoose_metrics:update(global, TM, Time),
     Result.
 

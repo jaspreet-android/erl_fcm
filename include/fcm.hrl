@@ -19,3 +19,13 @@
 
 -define(MYHOSTS, [<<"localhost">>]).
 -type proplist() :: list(tuple()).
+
+-define(CTYPE_KEY, <<"Content-Type">>).
+-define(JSON_MIME, <<"application/x-json">>).
+
+%% FCM PUSH
+-define(GRANT_TYPE, <<"urn:ietf:params:oauth:grant-type:jwt-bearer">>).
+-define(JWT_SCOPE, <<"https://www.googleapis.com/auth/firebase.messaging">>).
+-define(JWT_AUDIENCE, <<"https://oauth2.googleapis.com/token">>).
+-define(FCM_API_URL, "https://fcm.googleapis.com/v1/projects/hookzapp/messages:send").
+-define(FCM_AUTH_FILENAME, "serviceAccountKey.json").

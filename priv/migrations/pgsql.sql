@@ -4,7 +4,7 @@ CREATE TABLE fcm_tokens (
     user_id UUID NOT NULL,
     fcm_token TEXT NOT NULL,
     device_type VARCHAR(50),
-    token VARCHAR(100),
+    token TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -64,7 +64,7 @@ query(Connection, Query, Timeout) ->
 -spec prepare(Connection :: term(), Name :: atom(), Table :: binary(),
               Fields :: [binary()], Statement :: iodata()) ->
                      {ok, {binary(), [fun((term()) -> tuple())]}}.
-prepare(Connection, Name, Table, Fields, Statement) ->
+prepare(Connection, _, Table, Fields, Statement) ->
     TabCols = fields_to_tabcol(Fields, Table),
     try prepare2(Connection, TabCols, Statement)
     catch Class:Reason:Stacktrace ->
@@ -168,7 +168,7 @@ tabcol_to_mapper(_ServerType, TableDesc, TabCol) ->
             fun(P) -> generic_mapper(ODBCType, P) end
     end.
 
-tabcol_to_odbc_type(TabCol = {Table, Column}, TableDesc) ->
+tabcol_to_odbc_type(TabCol = {_, _}, TableDesc) ->
     case lists:keyfind(TabCol, 1, TableDesc) of
         false ->
 %%            ?LOG_ERROR(#{what => field_to_odbc_type_failed, table => Table,
